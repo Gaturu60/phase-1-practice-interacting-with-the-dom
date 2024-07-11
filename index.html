@@ -39,6 +39,96 @@
 
   </div>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Timer functionality
+      let timer;
+      const counterDisplay = document.getElementById('counter');
+
+      function startTimer() {
+        timer = setInterval(incrementCounter, 1000);
+      }
+
+      function stopTimer() {
+        clearInterval(timer);
+      }
+
+      function incrementCounter() {
+        counterDisplay.textContent = parseInt(counterDisplay.textContent) + 1;
+      }
+
+      // Plus button
+      const plusButton = document.getElementById('plus');
+      plusButton.addEventListener('click', () => {
+        counterDisplay.textContent = parseInt(counterDisplay.textContent) + 1;
+      });
+
+      // Minus button
+      const minusButton = document.getElementById('minus');
+      minusButton.addEventListener('click', () => {
+        counterDisplay.textContent = parseInt(counterDisplay.textContent) - 1;
+      });
+
+      // Like button
+      const likeButton = document.getElementById('heart');
+      const likesList = document.querySelector('.likes');
+      likeButton.addEventListener('click', () => {
+        const currentNumber = counterDisplay.textContent;
+
+        // Check if there's already a like for this number
+        let likeItem = document.querySelector(`.likes li[data-number="${currentNumber}"]`);
+        if (likeItem) {
+          const currentLikes = parseInt(likeItem.dataset.likes);
+          likeItem.dataset.likes = currentLikes + 1;
+          likeItem.textContent = `${currentNumber} has ${currentLikes + 1} likes`;
+        } else {
+          likeItem = document.createElement('li');
+          likeItem.dataset.number = currentNumber;
+          likeItem.dataset.likes = 1;
+          likeItem.textContent = `${currentNumber} has 1 like`;
+          likesList.appendChild(likeItem);
+        }
+      });
+
+      // Pause button
+      const pauseButton = document.getElementById('pause');
+      pauseButton.addEventListener('click', () => {
+        if (pauseButton.textContent === 'pause') {
+          stopTimer();
+          plusButton.disabled = true;
+          minusButton.disabled = true;
+          likeButton.disabled = true;
+          pauseButton.textContent = 'resume';
+        } else {
+          startTimer();
+          plusButton.disabled = false;
+          minusButton.disabled = false;
+          likeButton.disabled = false;
+          pauseButton.textContent = 'pause';
+        }
+      });
+
+      // Comment form
+      const commentForm = document.getElementById('comment-form');
+      const commentInput = document.getElementById('comment-input');
+      const commentsList = document.getElementById('list');
+
+      commentForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const commentText = commentInput.value.trim();
+        if (commentText !== '') {
+          const commentItem = document.createElement('div');
+          commentItem.textContent = commentText;
+          commentsList.appendChild(commentItem);
+          commentInput.value = '';
+        }
+      });
+
+      // Start the timer initially
+      startTimer();
+    });
+  </script>
+
   <script src="js/index.min.js"></script>
   <script src="js/challenge.js"></script>
 </body>
